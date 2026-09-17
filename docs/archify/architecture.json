@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ARTEMIS 모바일 자동화 실행 구조",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/hundong2/artemis.git",
+      "revision": "371aa6df56880643da57b30da936e9812fb0ec66"
+    }
+  },
+  "components": [
+    { "id": "user", "type": "external", "label": "사용자", "sublabel": "CLI 작업 요청", "pos": [40, 340], "size": [140, 68], "sources": [{ "path": "artemis/interfaces/cli/commands/run.py", "line": 159 }] },
+    { "id": "cli", "type": "backend", "label": "Typer CLI", "sublabel": "artemis run", "pos": [260, 340], "size": [140, 68], "sources": [{ "path": "artemis/interfaces/cli/main.py", "line": 41 }, { "path": "artemis/interfaces/cli/commands/run.py", "line": 44 }] },
+    { "id": "sdk", "type": "backend", "label": "Agent SDK", "sublabel": "작업·장치 컨텍스트", "pos": [480, 340], "size": [140, 68], "sources": [{ "path": "artemis/sdk/agent.py", "line": 132 }, { "path": "artemis/sdk/agent.py", "line": 517 }] },
+    { "id": "graph", "type": "backend", "label": "Pro 실행 그래프", "sublabel": "계획·행동·검증", "pos": [700, 340], "size": [160, 68], "sources": [{ "path": "artemis/sdk/agent.py", "line": 724 }, { "path": "artemis/graph/graph.py", "line": 965 }] },
+    { "id": "action", "type": "backend", "label": "기기 제어 경계", "sublabel": "ActionSession · ADB", "pos": [940, 340], "size": [160, 68], "sources": [{ "path": "artemis/agents/validator/validator.py", "line": 65 }, { "path": "artemis/mcp/action_session.py", "line": 66 }, { "path": "artemis/mcp/actuators/adb.py", "line": 101 }] },
+    { "id": "device", "type": "external", "label": "Android 기기", "sublabel": "터치·스크린·계층", "pos": [1180, 340], "size": [140, 68], "sources": [{ "path": "artemis/controllers/unified_controller.py", "line": 64 }, { "path": "artemis/drivers/factory.py", "line": 75 }, { "path": "artemis/drivers/android/adb_driver.py", "line": 73 }] },
+    { "id": "ide", "type": "external", "label": "AI 코딩 도구", "sublabel": "외부 MCP 클라이언트", "pos": [40, 110], "size": [140, 68], "sources": [{ "path": "mcp_server/server.py", "line": 82 }] },
+    { "id": "mcp", "type": "backend", "label": "FastMCP 서버", "sublabel": "작업 도구·백그라운드", "pos": [260, 110], "size": [140, 68], "sources": [{ "path": "mcp_server/base.py", "line": 33 }, { "path": "mcp_server/tools/task_runner.py", "line": 204 }, { "path": "mcp_server/background/task_runner.py", "line": 166 }] },
+    { "id": "llm", "type": "external", "label": "모델 제공자", "sublabel": "Planner·Operator 추론", "pos": [700, 110], "size": [160, 68], "sources": [{ "path": "artemis/agents/planner/planner.py", "line": 311 }, { "path": "artemis/agents/operator/operator.py", "line": 936 }, { "path": "artemis/services/llm.py", "line": 1 }] },
+    { "id": "trace", "type": "database", "label": "DataEngine", "sublabel": "SQLite·실행 trace", "pos": [480, 580], "size": [140, 68], "sources": [{ "path": "artemis/sdk/agent.py", "line": 1139 }, { "path": "artemis/data_engine/engine.py", "line": 392 }, { "path": "artemis/data_engine/storage.py", "line": 64 }] }
+  ],
+  "connections": [
+    { "id": "request", "from": "user", "to": "cli", "label": "실행 목표" },
+    { "id": "cli_task", "from": "cli", "to": "sdk", "label": "TaskRequest", "labelAt": [440, 426] },
+    { "id": "sdk_graph", "from": "sdk", "to": "graph", "label": "Pro 선택" },
+    { "id": "graph_action", "from": "graph", "to": "action", "label": "검증된 행동" },
+    { "id": "action_device", "from": "action", "to": "device", "label": "ADB·관측" },
+    { "id": "ide_mcp", "from": "ide", "to": "mcp", "label": "MCP 요청" },
+    { "id": "mcp_task", "from": "mcp", "to": "sdk", "label": "백그라운드 작업" },
+    { "id": "graph_llm", "from": "graph", "to": "llm", "label": "모델 추론" },
+    { "id": "sdk_trace", "from": "sdk", "to": "trace", "label": "세션·step 기록", "labelAt": [550, 422] }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "대표 경로", "items": ["CLI의 Pro 작업을 중심으로 표시", "외부 MCP 작업은 같은 Agent SDK로 유입"] },
+    { "dot": "amber", "title": "확인할 경계", "items": ["모델 제공자와 Android 기기는 외부", "DataEngine이 실행 trace를 로컬 SQLite에 기록"] }
+  ]
+}

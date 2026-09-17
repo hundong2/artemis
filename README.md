@@ -9,11 +9,17 @@
 <p align="center">
   <a href="./README.md"><b>English</b></a> •
   <a href="./README_CN.md">中文文档</a> •
+  <a href="./README_KR.md">한국어</a> •
   <a href="#workflow-showcase">Workflow Showcase</a> •
   <a href="#quick-start">Quick Start</a> •
   <a href="#mcp-setup">MCP for IDEs</a> •
   <a href="#benchmarks">Benchmarks</a> •
   <a href="https://discord.gg/wF2FN4WHGY">Discord Community</a>
+</p>
+
+<p align="center">
+  <a href="./guide/README.md">Korean learning guide</a> •
+  <a href="./docs/archify/README.md">Code architecture analysis</a>
 </p>
 
 <p align="center">
@@ -75,6 +81,8 @@
 <a id="quick-start"></a>
 ## Quick Start
 
+This fork is available at `hundong2/artemis`; the clone commands below use this fork. Upstream development lives at `google/artemis`.
+
 Ensure an Android device (with **USB Debugging** enabled) or emulator is connected. The one-click startup script will automatically:
 - **Install System Toolchains**: Detect and auto-install ADB, scrcpy, FFmpeg, and Python (`uv`) dependencies.
 - **Mount Global MCP Server & AI Agent Rules**: Prompt to automatically install global MCP configurations and the **Artemis Mobile Testing Mindset (`rules.md`)** into your AI IDEs (**Antigravity**, **Cursor**, **Claude Code**, **Codex**, **Windsurf**, **VS Code**, **Cline/Roo**, **OpenClaw**).
@@ -83,7 +91,7 @@ Ensure an Android device (with **USB Debugging** enabled) or emulator is connect
 
 ```bash
 # 1. Clone repo & navigate to directory
-git clone https://github.com/google/artemis.git && cd artemis
+git clone https://github.com/hundong2/artemis.git && cd artemis
 
 # 2. One-click launch
 ./start.sh
@@ -93,7 +101,7 @@ git clone https://github.com/google/artemis.git && cd artemis
 
 ```powershell
 # 1. Clone repo & navigate to directory
-git clone https://github.com/google/artemis.git
+git clone https://github.com/hundong2/artemis.git
 cd artemis
 
 # 2. One-click launch
@@ -209,7 +217,7 @@ Install the zero-runtime-dependency client on the development machine. ADB,
 agents, models, and image processing remain on the device host:
 
 ```powershell
-uv add "artemis-client @ git+https://github.com/google/artemis.git#subdirectory=packages/artemis-client"
+uv add "artemis-client @ git+https://github.com/hundong2/artemis.git#subdirectory=packages/artemis-client"
 ```
 
 ```python
